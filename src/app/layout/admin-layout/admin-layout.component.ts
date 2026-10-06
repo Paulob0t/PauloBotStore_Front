@@ -8,182 +8,162 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row">
+    <div class="min-h-screen bg-[#0a0d14] text-slate-200 flex flex-col md:flex-row select-none">
       
-      <!-- Sidebar Lateral Modular -->
-      <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0">
+      <!-- Sidebar Lateral Minimalista -->
+      <aside class="w-full md:w-64 bg-[#0d111a] border-r border-slate-800/80 flex flex-col justify-between shrink-0">
         <div>
           <!-- Logo & Brand Header -->
-          <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-800/80">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-xl shadow-md shadow-indigo-600/30">
-              <i class="fas fa-robot"></i>
+          <div class="h-16 flex items-center gap-2.5 px-6 border-b border-slate-800/80">
+            <div class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700/80 flex items-center justify-center text-slate-100 text-sm">
+              <i class="fas fa-cube"></i>
             </div>
             <div>
-              <div class="font-extrabold text-lg text-white tracking-tight leading-none">
-                PauloBot <span class="text-indigo-400">Store</span>
+              <div class="font-semibold text-sm text-white tracking-tight leading-none">
+                PauloBot <span class="text-slate-400 font-normal">Store</span>
               </div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Panel Administrador</span>
+              <span class="text-[10px] font-medium text-slate-500">Panel de Control</span>
             </div>
           </div>
 
           <!-- Navegación Modular -->
-          <nav class="p-4 space-y-1.5 text-sm font-medium">
+          <nav class="p-3 space-y-1 text-xs font-medium">
             <a
               routerLink="/admin"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
+              routerLinkActive="bg-slate-800 text-white"
               [routerLinkActiveOptions]="{ exact: true }"
-              class="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <i class="fas fa-chart-pie text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <i class="fas fa-chart-pie text-slate-400 group-hover:text-slate-200 w-4"></i>
               <span>Dashboard</span>
             </a>
 
-            <div class="pt-4 pb-2 px-4 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div class="pt-3 pb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
               Operación & Catálogo
             </div>
 
             <!-- Consulta de Productos -->
             <a
               routerLink="/admin/productos"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
+              routerLinkActive="bg-slate-800 text-white"
               [routerLinkActiveOptions]="{ exact: true }"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-boxes-stacked text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-boxes-stacked text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Consulta Productos</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
             <!-- Agregar Producto -->
             <a
               routerLink="/admin/productos/nuevo"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-box-open text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-plus text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Agregar Producto</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
             <!-- Categorías -->
             <a
               routerLink="/admin/categorias"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-tags text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-tags text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Categorías</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
             <!-- Subcategorías -->
             <a
               routerLink="/admin/subcategorias"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-folder-tree text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-folder-tree text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Subcategorías</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
-            <div class="pt-4 pb-2 px-4 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div class="pt-3 pb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
               Finanzas & Caja
             </div>
 
             <!-- Movimientos -->
             <a
               routerLink="/admin/movimientos"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-money-bill-transfer text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-money-bill-transfer text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Movimientos</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
             <!-- Cortes de Caja -->
             <a
               routerLink="/admin/cortes-caja"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-cash-register text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-cash-register text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Cortes de Caja</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
-            <div class="pt-4 pb-2 px-4 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div class="pt-3 pb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
               Configuración & Sistema
             </div>
 
-            <!-- Usuarios (Nuevo Módulo Migrado) -->
+            <!-- Usuarios -->
             <a
               routerLink="/admin/usuarios"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-users-gear text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-users-gear text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Usuarios</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
             </a>
 
             <!-- Configuración Empresa -->
             <a
               routerLink="/admin/configuracion"
-              routerLinkActive="bg-indigo-600/15 text-indigo-400 border border-indigo-500/30"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+              routerLinkActive="bg-slate-800 text-white"
+              class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors group"
             >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-sliders text-slate-400 group-hover:text-indigo-400 w-5"></i>
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-sliders text-slate-400 group-hover:text-slate-200 w-4"></i>
                 <span>Empresa</span>
               </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Nuevo</span>
-            </a>
-
-            <a
-              href="javascript:void(0)"
-              class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition-all opacity-70 group"
-              title="Módulo en proceso de migración"
-            >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-coins w-5 text-slate-500"></i>
-                <span>Monedero MDB</span>
-              </div>
-              <span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">Próx.</span>
             </a>
           </nav>
         </div>
 
         <!-- Footer Sidebar con Usuario & Logout -->
-        <div class="p-4 border-t border-slate-800/80">
-          <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-950/60 border border-slate-800">
-            <div class="flex items-center gap-3 overflow-hidden">
-              <div class="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center font-bold text-sm shrink-0">
+        <div class="p-3 border-t border-slate-800/80">
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-[#0a0d14] border border-slate-800/80">
+            <div class="flex items-center gap-2.5 overflow-hidden">
+              <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700/80 text-slate-200 flex items-center justify-center font-medium text-xs shrink-0">
                 {{ (user()?.nombre || 'U').charAt(0).toUpperCase() }}
               </div>
               <div class="truncate">
-                <div class="text-xs font-bold text-white truncate">{{ user()?.nombre }}</div>
-                <div class="text-[10px] text-slate-400 truncate">{{ user()?.correo }}</div>
+                <div class="text-xs font-medium text-slate-200 truncate">{{ user()?.nombre }}</div>
+                <div class="text-[10px] text-slate-500 truncate">{{ user()?.correo }}</div>
               </div>
             </div>
             <button
               (click)="onLogout()"
-              class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              class="w-7 h-7 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-950/30 flex items-center justify-center transition-colors cursor-pointer shrink-0"
               title="Cerrar Sesión"
             >
               <i class="fas fa-arrow-right-from-bracket text-xs"></i>
@@ -196,26 +176,26 @@ import { AuthService } from '../../core/services/auth.service';
       <div class="flex-1 flex flex-col min-w-0">
         
         <!-- Header Superior -->
-        <header class="h-20 bg-slate-900/60 border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-40 px-6 sm:px-8 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sistema En Línea
+        <header class="h-16 bg-[#0d111a]/80 border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-40 px-6 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950/40 text-emerald-400 border border-emerald-800/40">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sistema en línea
             </span>
           </div>
 
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3">
             <a
               href="http://localhost:8000/api/docs"
               target="_blank"
-              class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-400 px-3 py-1.5 rounded-xl border border-slate-800 hover:border-slate-700 transition-all"
+              class="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors"
             >
-              <i class="fas fa-book text-indigo-400"></i>
-              <span>Swagger API Docs</span>
+              <i class="fas fa-book text-slate-400 text-xs"></i>
+              <span>API Docs</span>
             </a>
 
             <a
               routerLink="/store"
-              class="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-all"
+              class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-900 bg-slate-100 hover:bg-white px-3 py-1.5 rounded-lg transition-colors"
             >
               <i class="fas fa-store text-xs"></i>
               <span>Ver Tienda</span>
@@ -224,7 +204,7 @@ import { AuthService } from '../../core/services/auth.service';
         </header>
 
         <!-- Outlet de Componentes -->
-        <main class="flex-1 p-6 sm:p-8 lg:p-10 max-w-7xl w-full mx-auto">
+        <main class="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto">
           <router-outlet></router-outlet>
         </main>
       </div>
