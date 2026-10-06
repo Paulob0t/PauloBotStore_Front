@@ -155,7 +155,6 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                   id="id_subcategoria"
                   formControlName="id_subcategoria"
                   class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-300 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors disabled:opacity-40 cursor-pointer"
-                  [disabled]="availableSubcategories().length === 0"
                 >
                   <option [ngValue]="null">-- Ninguna / Opcional --</option>
                   @for (sub of availableSubcategories(); track sub.id) {
@@ -529,6 +528,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.productForm.get('id_subcategoria')?.disable();
     this.categoryService.loadCategories();
   }
 
@@ -553,9 +553,11 @@ export class ProductFormComponent implements OnInit {
     const cat = this.categories().find(c => c.id === selectedCatId);
     if (cat && cat.subcategorias && cat.subcategorias.length > 0) {
       this.availableSubcategories.set(cat.subcategorias);
+      this.productForm.get('id_subcategoria')?.enable();
     } else {
       this.availableSubcategories.set([]);
       this.productForm.get('id_subcategoria')?.setValue(null);
+      this.productForm.get('id_subcategoria')?.disable();
     }
   }
 
@@ -613,7 +615,7 @@ export class ProductFormComponent implements OnInit {
       return;
     }
 
-    const formVal = this.productForm.value;
+    const formVal = this.productForm.getRawValue();
 
     const payload = {
       nombre_producto: formVal.nombre_producto.trim(),
