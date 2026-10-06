@@ -118,11 +118,6 @@ import { CommonModule } from '@angular/common';
       <footer class="relative z-10 border-t border-slate-800/60 bg-[#0d111a]/40 py-6">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
           <div>© 2026 PauloBot Store. Todos los derechos reservados.</div>
-          <div class="flex items-center gap-4">
-            <a href="http://localhost:8000/api/docs" target="_blank" class="hover:text-slate-300 transition-colors">
-              API Docs
-            </a>
-          </div>
         </div>
       </footer>
 

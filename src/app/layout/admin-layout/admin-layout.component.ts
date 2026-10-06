@@ -185,15 +185,6 @@ import { AuthService } from '../../core/services/auth.service';
 
           <div class="flex items-center gap-3">
             <a
-              href="http://localhost:8000/api/docs"
-              target="_blank"
-              class="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors"
-            >
-              <i class="fas fa-book text-slate-400 text-xs"></i>
-              <span>API Docs</span>
-            </a>
-
-            <a
               routerLink="/store"
               class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-900 bg-slate-100 hover:bg-white px-3 py-1.5 rounded-lg transition-colors"
             >
