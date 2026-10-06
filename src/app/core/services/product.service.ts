@@ -79,7 +79,7 @@ export class ProductService {
       await this.loadProducts();
       return response;
     } catch (error: any) {
-      const msg = error?.error?.message || error?.message || 'Error al guardar el producto.';
+      const msg = error?.error?.message || error?.error?.detail || error?.message || 'Error al guardar el producto.';
       throw new Error(msg);
     } finally {
       this.loadingSignal.set(false);
@@ -94,7 +94,7 @@ export class ProductService {
       this.productsSignal.update(list => list.filter(p => p.id_producto !== id));
       return response;
     } catch (error: any) {
-      const msg = error?.error?.message || error?.message || 'Error al eliminar el producto.';
+      const msg = error?.error?.message || error?.error?.detail || error?.message || 'Error al eliminar el producto.';
       throw new Error(msg);
     } finally {
       this.loadingSignal.set(false);

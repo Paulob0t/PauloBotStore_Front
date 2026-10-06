@@ -136,9 +136,9 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                   class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-300 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors cursor-pointer"
                   [class.border-red-600]="isFieldInvalid('id_categoria')"
                 >
-                  <option value="" disabled selected>-- Seleccionar Categoría --</option>
+                  <option [ngValue]="null" disabled selected>-- Seleccionar Categoría --</option>
                   @for (cat of categories(); track cat.id) {
-                    <option [value]="cat.id">{{ cat.nombre }}</option>
+                    <option [ngValue]="cat.id">{{ cat.nombre }}</option>
                   }
                 </select>
                 @if (isFieldInvalid('id_categoria')) {
@@ -158,7 +158,7 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                 >
                   <option [ngValue]="null">-- Ninguna / Opcional --</option>
                   @for (sub of availableSubcategories(); track sub.id) {
-                    <option [value]="sub.id">{{ sub.nombre }}</option>
+                    <option [ngValue]="sub.id">{{ sub.nombre }}</option>
                   }
                 </select>
               </div>
@@ -515,7 +515,7 @@ export class ProductFormComponent implements OnInit {
       nombre_producto: ['', [Validators.required]],
       sku: [''],
       descripcion: ['', [Validators.required]],
-      id_categoria: ['', [Validators.required]],
+      id_categoria: [null, [Validators.required]],
       id_subcategoria: [null],
       precio: [null, [Validators.required, Validators.min(0)]],
       descuento: [null, [Validators.min(0)]],
@@ -617,22 +617,34 @@ export class ProductFormComponent implements OnInit {
 
     const formVal = this.productForm.getRawValue();
 
+    const subId = formVal.id_subcategoria && formVal.id_subcategoria !== 'null' && Number(formVal.id_subcategoria) > 0
+      ? Number(formVal.id_subcategoria)
+      : null;
+
+    const descVal = formVal.descuento !== null && formVal.descuento !== '' && !isNaN(Number(formVal.descuento))
+      ? Number(formVal.descuento)
+      : null;
+
+    const ordVal = formVal.destacado && formVal.orden_destacado && !isNaN(Number(formVal.orden_destacado))
+      ? Number(formVal.orden_destacado)
+      : null;
+
     const payload = {
-      nombre_producto: formVal.nombre_producto.trim(),
-      sku: formVal.sku ? formVal.sku.trim() : null,
-      descripcion: formVal.descripcion.trim(),
+      nombre_producto: (formVal.nombre_producto || '').trim(),
+      sku: formVal.sku && formVal.sku.trim() ? formVal.sku.trim() : null,
+      descripcion: (formVal.descripcion || '').trim(),
       id_categoria: Number(formVal.id_categoria),
-      id_subcategoria: formVal.id_subcategoria ? Number(formVal.id_subcategoria) : null,
+      id_subcategoria: subId,
       precio: Number(formVal.precio),
-      descuento: formVal.descuento !== null && formVal.descuento !== '' ? Number(formVal.descuento) : null,
+      descuento: descVal,
       stock: Number(formVal.stock),
-      ubicacion: formVal.ubicacion.trim().toUpperCase(),
+      ubicacion: (formVal.ubicacion || '').trim().toUpperCase(),
       imagen_principal: this.imgPrincipalPreview()!,
       imagen_secundaria_1: this.imgSec1Preview(),
       imagen_secundaria_2: this.imgSec2Preview(),
       imagen_secundaria_3: this.imgSec3Preview(),
       destacado: !!formVal.destacado,
-      orden_destacado: formVal.destacado && formVal.orden_destacado ? Number(formVal.orden_destacado) : null,
+      orden_destacado: ordVal,
       activo: !!formVal.activo
     };
 
