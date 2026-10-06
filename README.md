@@ -73,7 +73,7 @@ flowchart TD
     end
 
     subgraph Backend ["🔙 REST Backend & Database"]
-        API["PHP 8 REST API (Port 8000)"]
+        API["🐍 Python FastAPI REST API (Port 8000)"]
         DB[("🐘 PostgreSQL (Podman / Port 5432)")]
     end
 
