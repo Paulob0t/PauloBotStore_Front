@@ -1,4 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { Api } from '../../api/api';
 import { createProduct, getProducts, getFeaturedProducts, getProductById, checkFeaturedOrder, deleteProduct } from '../../api/functions';
 import { CreateProductRequest, ProductDto, ProductResponse } from '../../api/models';
@@ -44,7 +46,10 @@ export class ProductService {
   readonly activeProductsCount = computed(() => this.productsSignal().filter(p => p.activo === 1).length);
   readonly totalStockCount = computed(() => this.productsSignal().reduce((acc, p) => acc + (p.stock || 0), 0));
 
-  constructor(private api: Api) {}
+  constructor(
+    private api: Api,
+    private http: HttpClient
+  ) {}
 
   async loadFeaturedProducts(): Promise<ProductDto[]> {
     try {
@@ -80,6 +85,22 @@ export class ProductService {
       return response;
     } catch (error: any) {
       const msg = error?.error?.message || error?.error?.detail || error?.message || 'Error al guardar el producto.';
+      throw new Error(msg);
+    } finally {
+      this.loadingSignal.set(false);
+    }
+  }
+
+  async update(id: number, productData: any): Promise<ProductResponse> {
+    this.loadingSignal.set(true);
+    try {
+      const response = await firstValueFrom(
+        this.http.put<ProductResponse>(`/api/v1/products/${id}`, productData)
+      );
+      await this.loadProducts();
+      return response;
+    } catch (error: any) {
+      const msg = error?.error?.message || error?.error?.detail || error?.message || 'Error al actualizar el producto.';
       throw new Error(msg);
     } finally {
       this.loadingSignal.set(false);

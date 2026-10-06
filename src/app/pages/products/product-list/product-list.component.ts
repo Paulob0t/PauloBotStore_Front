@@ -1,15 +1,15 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
-import { ProductDto } from '../../../api/models';
+import { ProductDto, SubcategoryDto } from '../../../api/models';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, ReactiveFormsModule],
   template: `
     <div class="space-y-6 animate-fade-in max-w-7xl mx-auto">
       
@@ -256,6 +256,17 @@ import { ProductDto } from '../../../api/models';
                     <!-- Acciones -->
                     <td class="py-3 text-right">
                       <div class="inline-flex items-center gap-1.5">
+                        <!-- Botón Editar con Modal -->
+                        <button
+                          type="button"
+                          (click)="openEditModal(prod)"
+                          class="w-7 h-7 rounded-lg bg-[#0a0d14] border border-slate-800 text-slate-400 hover:text-white hover:border-slate-600 hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+                          title="Editar producto"
+                        >
+                          <i class="fas fa-pen text-[11px]"></i>
+                        </button>
+
+                        <!-- Botón Eliminar -->
                         <button
                           type="button"
                           (click)="confirmDelete(prod)"
@@ -282,9 +293,257 @@ import { ProductDto } from '../../../api/models';
 
       </div>
 
-      <!-- Modal de Confirmación de Eliminación -->
+      <!-- ================= MODAL EDITOR DE PRODUCTO ================= -->
+      @if (editingProduct(); as editProd) {
+        <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fade-in overflow-y-auto">
+          <div class="bg-[#111622] border border-slate-800/90 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-5 my-auto max-h-[92vh] flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between pb-3.5 border-b border-slate-800/80 shrink-0">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700/60 text-slate-300 flex items-center justify-center text-xs shrink-0">
+                  <i class="fas fa-pen-to-square"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-semibold text-white">Editar Producto #{{ editProd.id_producto }}</h3>
+                  <p class="text-[11px] text-slate-400 font-normal">Modifica datos, precios, inventario e imagen</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                (click)="closeEditModal()"
+                class="w-7 h-7 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <i class="fas fa-xmark text-sm"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body con Scroll -->
+            <form [formGroup]="editForm" (ngSubmit)="saveEditedProduct()" class="flex-1 overflow-y-auto pr-1 space-y-4 text-xs" novalidate>
+              
+              <!-- Alerta de Error en Modal -->
+              @if (editError()) {
+                <div class="p-3 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-xs flex items-center gap-2">
+                  <i class="fas fa-circle-exclamation text-red-400 shrink-0"></i>
+                  <span>{{ editError() }}</span>
+                </div>
+              }
+
+              <!-- 1. Nombre & SKU -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div class="sm:col-span-8">
+                  <label for="edit_nombre" class="block font-medium text-slate-300 mb-1">Nombre <span class="text-red-400">*</span></label>
+                  <input
+                    id="edit_nombre"
+                    type="text"
+                    formControlName="nombre_producto"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
+                  />
+                </div>
+                <div class="sm:col-span-4">
+                  <label for="edit_sku" class="block font-medium text-slate-300 mb-1">SKU / Código</label>
+                  <input
+                    id="edit_sku"
+                    type="text"
+                    formControlName="sku"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 font-mono"
+                  />
+                </div>
+              </div>
+
+              <!-- 2. Clasificación -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label for="edit_cat" class="block font-medium text-slate-300 mb-1">Categoría <span class="text-red-400">*</span></label>
+                  <select
+                    id="edit_cat"
+                    formControlName="id_categoria"
+                    (change)="onEditCategoryChange()"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-300 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 cursor-pointer"
+                  >
+                    @for (cat of categories(); track cat.id) {
+                      <option [ngValue]="cat.id">{{ cat.nombre }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label for="edit_subcat" class="block font-medium text-slate-300 mb-1">Subcategoría</label>
+                  <select
+                    id="edit_subcat"
+                    formControlName="id_subcategoria"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-300 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 disabled:opacity-40 cursor-pointer"
+                  >
+                    <option [ngValue]="null">-- Ninguna / Opcional --</option>
+                    @for (sub of editAvailableSubcategories(); track sub.id) {
+                      <option [ngValue]="sub.id">{{ sub.nombre }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <!-- 3. Descripción -->
+              <div>
+                <label for="edit_desc" class="block font-medium text-slate-300 mb-1">Descripción <span class="text-red-400">*</span></label>
+                <textarea
+                  id="edit_desc"
+                  rows="2"
+                  formControlName="descripcion"
+                  class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
+                ></textarea>
+              </div>
+
+              <!-- 4. Precios, Stock y Ubicación -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div>
+                  <label for="edit_precio" class="block font-medium text-slate-300 mb-1">Precio ($) <span class="text-red-400">*</span></label>
+                  <input
+                    id="edit_precio"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    formControlName="precio"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
+                  />
+                </div>
+                <div>
+                  <label for="edit_descuento" class="block font-medium text-slate-300 mb-1">Descuento ($)</label>
+                  <input
+                    id="edit_descuento"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    formControlName="descuento"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
+                  />
+                </div>
+                <div>
+                  <label for="edit_stock" class="block font-medium text-slate-300 mb-1">Stock <span class="text-red-400">*</span></label>
+                  <input
+                    id="edit_stock"
+                    type="number"
+                    min="0"
+                    formControlName="stock"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
+                  />
+                </div>
+                <div>
+                  <label for="edit_ubicacion" class="block font-medium text-slate-300 mb-1">Slot / Ubicación <span class="text-red-400">*</span></label>
+                  <input
+                    id="edit_ubicacion"
+                    type="text"
+                    formControlName="ubicacion"
+                    (input)="onEditUbicacionInput($event)"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 uppercase font-mono"
+                  />
+                </div>
+              </div>
+
+              <!-- 5. Opciones Destacado & Activo -->
+              <div class="p-3.5 bg-[#0d111a] border border-slate-800 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <!-- Checkbox Activo -->
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    formControlName="activo"
+                    class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-slate-200 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                  />
+                  <div>
+                    <span class="text-slate-200 font-medium">Activo en Tienda</span>
+                    <p class="text-[10px] text-slate-500">Visible para clientes en la máquina</p>
+                  </div>
+                </label>
+
+                <!-- Checkbox Destacado -->
+                <div class="space-y-2">
+                  <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      formControlName="destacado"
+                      (change)="onEditDestacadoChange()"
+                      class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-slate-200 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                    />
+                    <div>
+                      <span class="text-slate-200 font-medium">Producto Destacado</span>
+                      <p class="text-[10px] text-slate-500">Aparece en carrusel principal</p>
+                    </div>
+                  </label>
+
+                  @if (editForm.get('destacado')?.value) {
+                    <div class="pl-6">
+                      <label for="edit_orden" class="block text-[11px] text-slate-400 mb-1">Posición en carrusel (1-8):</label>
+                      <input
+                        id="edit_orden"
+                        type="number"
+                        min="1"
+                        max="8"
+                        formControlName="orden_destacado"
+                        class="w-24 px-2.5 py-1 bg-[#111622] border border-slate-700 rounded-lg text-slate-200 text-xs focus:outline-none focus:border-slate-500"
+                      />
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- 6. Imagen del Producto -->
+              <div class="p-3.5 bg-[#0d111a] border border-slate-800 rounded-xl space-y-2.5">
+                <label class="block font-medium text-slate-300">Imagen del Producto</label>
+                <div class="flex items-center gap-4">
+                  <!-- Preview -->
+                  <div class="w-16 h-16 rounded-xl bg-[#111622] border border-slate-800 overflow-hidden flex items-center justify-center p-1 shrink-0">
+                    <img
+                      [src]="editImagePreview() || getImageUrl(editProd.id_producto)"
+                      [alt]="editProd.nombre_producto"
+                      class="w-full h-full object-contain"
+                    />
+                  </div>
+
+                  <!-- Botón Reemplazar Imagen -->
+                  <div class="flex-1 space-y-1">
+                    <label class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer border border-slate-700/60">
+                      <i class="fas fa-camera text-[11px]"></i>
+                      <span>Cambiar Imagen</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onEditImageChange($event)"
+                        class="hidden"
+                      />
+                    </label>
+                    <p class="text-[10px] text-slate-500">Se convertirá automáticamente a WebP optimizado</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Modal Footer -->
+              <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-800/80 shrink-0">
+                <button
+                  type="button"
+                  (click)="closeEditModal()"
+                  class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  [disabled]="isSaving() || editForm.invalid"
+                  class="px-4 py-2 rounded-xl text-xs font-medium text-slate-900 bg-slate-100 hover:bg-white transition-colors cursor-pointer shadow-sm disabled:opacity-40"
+                >
+                  @if (isSaving()) {
+                    <i class="fas fa-spinner fa-spin mr-1"></i> Guardando...
+                  } @else {
+                    <i class="fas fa-check mr-1"></i> Guardar Cambios
+                  }
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      }
+
+      <!-- ================= MODAL DE CONFIRMACIÓN DE ELIMINACIÓN ================= -->
       @if (productToDelete(); as prod) {
-        <div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+        <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
           <div class="bg-[#111622] border border-slate-800/90 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
             <div class="w-10 h-10 rounded-xl bg-red-950/40 text-red-400 flex items-center justify-center text-base border border-red-800/40">
               <i class="fas fa-triangle-exclamation"></i>
@@ -332,6 +591,14 @@ export class ProductListComponent implements OnInit {
   alertMessage = signal<string | null>(null);
   alertType = signal<'success' | 'error'>('success');
 
+  // Estado del Modal Editor
+  editingProduct = signal<ProductDto | null>(null);
+  editForm: FormGroup;
+  editImagePreview = signal<string | null>(null);
+  editAvailableSubcategories = signal<SubcategoryDto[]>([]);
+  isSaving = signal<boolean>(false);
+  editError = signal<string | null>(null);
+
   get products() {
     return this.productService.filteredProducts;
   }
@@ -358,8 +625,24 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService
-  ) {}
+    private categoryService: CategoryService,
+    private fb: FormBuilder
+  ) {
+    this.editForm = this.fb.group({
+      nombre_producto: ['', [Validators.required]],
+      sku: [''],
+      descripcion: ['', [Validators.required]],
+      id_categoria: [null, [Validators.required]],
+      id_subcategoria: [null],
+      precio: [null, [Validators.required, Validators.min(0)]],
+      descuento: [null, [Validators.min(0)]],
+      stock: [10, [Validators.required, Validators.min(0)]],
+      ubicacion: ['', [Validators.required, Validators.pattern(/^[A-Za-z][0-9]$/)]],
+      destacado: [false],
+      orden_destacado: [null],
+      activo: [true]
+    });
+  }
 
   ngOnInit(): void {
     this.refresh();
@@ -381,6 +664,149 @@ export class ProductListComponent implements OnInit {
   getImageUrl(id: number): string {
     return this.productService.getProductImageUrl(id);
   }
+
+  // ----------- Métodos de Edición con Modal ----------- //
+
+  openEditModal(prod: ProductDto): void {
+    this.editingProduct.set(prod);
+    this.editImagePreview.set(null);
+    this.editError.set(null);
+
+    // Cargar subcategorías de la categoría correspondiente
+    const cat = this.categories().find(c => c.id === prod.id_categoria);
+    if (cat && cat.subcategorias && cat.subcategorias.length > 0) {
+      this.editAvailableSubcategories.set(cat.subcategorias);
+      this.editForm.get('id_subcategoria')?.enable();
+    } else {
+      this.editAvailableSubcategories.set([]);
+      this.editForm.get('id_subcategoria')?.disable();
+    }
+
+    this.editForm.patchValue({
+      nombre_producto: prod.nombre_producto,
+      sku: prod.sku || '',
+      descripcion: prod.descripcion || '',
+      id_categoria: prod.id_categoria,
+      id_subcategoria: prod.id_subcategoria || null,
+      precio: prod.precio,
+      descuento: prod.descuento || null,
+      stock: prod.stock,
+      ubicacion: prod.ubicacion,
+      destacado: prod.destacado === 1,
+      orden_destacado: prod.orden_destacado || null,
+      activo: prod.activo === 1
+    });
+
+    this.onEditDestacadoChange();
+  }
+
+  closeEditModal(): void {
+    this.editingProduct.set(null);
+    this.editImagePreview.set(null);
+    this.editError.set(null);
+  }
+
+  onEditCategoryChange(): void {
+    const selectedCatId = Number(this.editForm.get('id_categoria')?.value);
+    const cat = this.categories().find(c => c.id === selectedCatId);
+    if (cat && cat.subcategorias && cat.subcategorias.length > 0) {
+      this.editAvailableSubcategories.set(cat.subcategorias);
+      this.editForm.get('id_subcategoria')?.enable();
+    } else {
+      this.editAvailableSubcategories.set([]);
+      this.editForm.get('id_subcategoria')?.setValue(null);
+      this.editForm.get('id_subcategoria')?.disable();
+    }
+  }
+
+  onEditDestacadoChange(): void {
+    const destacado = !!this.editForm.get('destacado')?.value;
+    const ordenControl = this.editForm.get('orden_destacado');
+    if (destacado) {
+      ordenControl?.setValidators([Validators.required, Validators.min(1), Validators.max(8)]);
+    } else {
+      ordenControl?.clearValidators();
+      ordenControl?.setValue(null);
+    }
+    ordenControl?.updateValueAndValidity();
+  }
+
+  onEditUbicacionInput(event: any): void {
+    const val = (event.target.value || '').toUpperCase();
+    this.editForm.get('ubicacion')?.setValue(val, { emitEvent: false });
+  }
+
+  async onEditImageChange(event: any): Promise<void> {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const compressed = await this.productService.compressImage(file);
+      this.editImagePreview.set(compressed);
+    } catch (err) {
+      console.error('Error al procesar la nueva imagen:', err);
+    }
+  }
+
+  async saveEditedProduct(): Promise<void> {
+    const prod = this.editingProduct();
+    if (!prod) return;
+
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSaving.set(true);
+    this.editError.set(null);
+
+    const formVal = this.editForm.getRawValue();
+
+    const subId = formVal.id_subcategoria && formVal.id_subcategoria !== 'null' && Number(formVal.id_subcategoria) > 0
+      ? Number(formVal.id_subcategoria)
+      : null;
+
+    const descVal = formVal.descuento !== null && formVal.descuento !== '' && !isNaN(Number(formVal.descuento))
+      ? Number(formVal.descuento)
+      : null;
+
+    const ordVal = formVal.destacado && formVal.orden_destacado && !isNaN(Number(formVal.orden_destacado))
+      ? Number(formVal.orden_destacado)
+      : null;
+
+    const payload: any = {
+      nombre_producto: (formVal.nombre_producto || '').trim(),
+      sku: formVal.sku && formVal.sku.trim() ? formVal.sku.trim() : null,
+      descripcion: (formVal.descripcion || '').trim(),
+      id_categoria: Number(formVal.id_categoria),
+      id_subcategoria: subId,
+      precio: Number(formVal.precio),
+      descuento: descVal,
+      stock: Number(formVal.stock),
+      ubicacion: (formVal.ubicacion || '').trim().toUpperCase(),
+      destacado: !!formVal.destacado,
+      orden_destacado: ordVal,
+      activo: !!formVal.activo
+    };
+
+    // Solo si se subió una nueva imagen la enviamos para actualizar en disco
+    if (this.editImagePreview()) {
+      payload.imagen_principal = this.editImagePreview();
+    }
+
+    try {
+      const res = await this.productService.update(prod.id_producto, payload);
+      this.alertType.set('success');
+      this.alertMessage.set(res.message || 'Producto actualizado exitosamente.');
+      this.closeEditModal();
+    } catch (err: any) {
+      this.editError.set(err.message || 'Error al actualizar el producto.');
+    } finally {
+      this.isSaving.set(false);
+    }
+  }
+
+  // ----------- Métodos de Eliminación ----------- //
 
   confirmDelete(prod: ProductDto): void {
     this.productToDelete.set(prod);
