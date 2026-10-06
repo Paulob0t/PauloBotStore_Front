@@ -14,22 +14,13 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
     <div class="space-y-6 animate-fade-in max-w-5xl mx-auto">
       
       <!-- Header de la Página -->
-      <div class="flex items-center gap-3">
-        <a
-          routerLink="/admin/productos"
-          class="w-8 h-8 rounded-lg bg-[#111622] border border-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-          title="Volver a Consulta de Productos"
-        >
-          <i class="fas fa-arrow-left text-xs"></i>
-        </a>
-        <div>
-          <h1 class="text-2xl font-semibold text-white tracking-tight">
-            Agregar Nuevo Producto
-          </h1>
-          <p class="text-xs text-slate-400 mt-1 font-normal">
-            Registra un producto en el catálogo con precios, stock, ubicación e imágenes
-          </p>
-        </div>
+      <div>
+        <h1 class="text-2xl font-semibold text-white tracking-tight">
+          Agregar Nuevo Producto
+        </h1>
+        <p class="text-xs text-slate-400 mt-1 font-normal">
+          Registra un producto en el catálogo con precios, stock, ubicación e imágenes
+        </p>
       </div>
 
       <!-- Alertas de Estado -->
