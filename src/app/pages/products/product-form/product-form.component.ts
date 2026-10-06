@@ -11,90 +11,83 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   template: `
-    <div class="space-y-8 animate-fade-in max-w-5xl mx-auto">
+    <div class="space-y-6 animate-fade-in max-w-5xl mx-auto">
       
       <!-- Header de la Página -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <a
-            routerLink="/admin"
-            class="w-10 h-10 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-sm"
-            title="Volver al Dashboard"
-          >
-            <i class="fas fa-arrow-left"></i>
-          </a>
-          <div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <span class="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center text-lg">
-                <i class="fas fa-box-open"></i>
-              </span>
-              Agregar Nuevo Producto
-            </h1>
-            <p class="text-xs sm:text-sm text-slate-400 mt-1">
-              Registra un producto en el catálogo con precios, stock, ubicación e imágenes optimizadas.
-            </p>
-          </div>
+      <div class="flex items-center gap-3">
+        <a
+          routerLink="/admin/productos"
+          class="w-8 h-8 rounded-lg bg-[#111622] border border-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          title="Volver a Consulta de Productos"
+        >
+          <i class="fas fa-arrow-left text-xs"></i>
+        </a>
+        <div>
+          <h1 class="text-2xl font-semibold text-white tracking-tight">
+            Agregar Nuevo Producto
+          </h1>
+          <p class="text-xs text-slate-400 mt-1 font-normal">
+            Registra un producto en el catálogo con precios, stock, ubicación e imágenes
+          </p>
         </div>
       </div>
 
       <!-- Alertas de Estado -->
       @if (errorMessage()) {
-        <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm flex items-start gap-3 animate-fade-in">
-          <i class="fas fa-circle-exclamation text-rose-400 mt-0.5 text-base shrink-0"></i>
-          <div class="flex-1 font-medium">{{ errorMessage() }}</div>
+        <div class="p-3.5 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-xs flex items-start gap-2.5 animate-fade-in">
+          <i class="fas fa-circle-exclamation text-red-400 mt-0.5 text-sm shrink-0"></i>
+          <div class="flex-1 font-medium leading-relaxed">{{ errorMessage() }}</div>
         </div>
       }
 
       @if (successMessage()) {
-        <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm flex items-start gap-3 animate-fade-in">
-          <i class="fas fa-circle-check text-emerald-400 mt-0.5 text-base shrink-0"></i>
-          <div class="flex-1 font-medium">{{ successMessage() }}</div>
+        <div class="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 text-xs flex items-start gap-2.5 animate-fade-in">
+          <i class="fas fa-circle-check text-emerald-400 mt-0.5 text-sm shrink-0"></i>
+          <div class="flex-1 font-medium leading-relaxed">{{ successMessage() }}</div>
         </div>
       }
 
       <!-- Formulario Principal -->
-      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-12 gap-6" novalidate>
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-12 gap-5" novalidate>
         
         <!-- Columna Izquierda: Datos, Clasificación, Precios (8 cols) -->
-        <div class="lg:col-span-8 space-y-6">
+        <div class="lg:col-span-8 space-y-5">
           
           <!-- 1. Datos Básicos -->
-          <section class="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 sm:p-7 shadow-sm">
-            <header class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
-              <div class="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 font-bold text-sm flex items-center justify-center border border-indigo-500/20">
+          <section class="bg-[#111622] border border-slate-800/90 rounded-2xl p-5 sm:p-6">
+            <header class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-800/80">
+              <div class="w-6 h-6 rounded-md bg-slate-800 border border-slate-700/60 text-slate-300 font-medium text-xs flex items-center justify-center">
                 1
               </div>
               <div>
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-info-circle text-indigo-400"></i> Datos del Producto
-                </h2>
-                <p class="text-xs text-slate-400">Nombre, código identificador y descripción comercial</p>
+                <h2 class="text-sm font-semibold text-white">Datos Principales</h2>
+                <p class="text-[11px] text-slate-500">Nombre, código identificador y descripción</p>
               </div>
             </header>
 
             <div class="space-y-4">
-              <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
                 <!-- Nombre del Producto -->
                 <div class="sm:col-span-8">
-                  <label for="nombre_producto" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                    Nombre del Producto <span class="text-rose-400">*</span>
+                  <label for="nombre_producto" class="block text-xs font-medium text-slate-300 mb-1.5">
+                    Nombre del Producto <span class="text-red-400">*</span>
                   </label>
                   <input
                     id="nombre_producto"
                     type="text"
                     formControlName="nombre_producto"
                     placeholder="Ej: Coca Cola 600ml"
-                    class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                    [class.border-rose-500]="isFieldInvalid('nombre_producto')"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
+                    [class.border-red-600]="isFieldInvalid('nombre_producto')"
                   />
                   @if (isFieldInvalid('nombre_producto')) {
-                    <p class="mt-1.5 text-xs text-rose-400">El nombre del producto es obligatorio.</p>
+                    <p class="mt-1 text-[11px] text-red-400">El nombre del producto es obligatorio.</p>
                   }
                 </div>
 
                 <!-- SKU / Código -->
                 <div class="sm:col-span-4">
-                  <label for="sku" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                  <label for="sku" class="block text-xs font-medium text-slate-300 mb-1.5">
                     SKU / Código
                   </label>
                   <input
@@ -102,57 +95,55 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                     type="text"
                     formControlName="sku"
                     placeholder="COD-001"
-                    class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
                   />
                 </div>
               </div>
 
               <!-- Descripción -->
               <div>
-                <label for="descripcion" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                  Descripción <span class="text-rose-400">*</span>
+                <label for="descripcion" class="block text-xs font-medium text-slate-300 mb-1.5">
+                  Descripción <span class="text-red-400">*</span>
                 </label>
                 <textarea
                   id="descripcion"
                   rows="3"
                   formControlName="descripcion"
                   placeholder="Describe brevemente las características del producto..."
-                  class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                  [class.border-rose-500]="isFieldInvalid('descripcion')"
+                  class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
+                  [class.border-red-600]="isFieldInvalid('descripcion')"
                 ></textarea>
                 @if (isFieldInvalid('descripcion')) {
-                  <p class="mt-1.5 text-xs text-rose-400">La descripción es obligatoria.</p>
+                  <p class="mt-1 text-[11px] text-red-400">La descripción es obligatoria.</p>
                 }
               </div>
             </div>
           </section>
 
           <!-- 2. Clasificación -->
-          <section class="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 sm:p-7 shadow-sm">
-            <header class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
-              <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 font-bold text-sm flex items-center justify-center border border-purple-500/20">
+          <section class="bg-[#111622] border border-slate-800/90 rounded-2xl p-5 sm:p-6">
+            <header class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-800/80">
+              <div class="w-6 h-6 rounded-md bg-slate-800 border border-slate-700/60 text-slate-300 font-medium text-xs flex items-center justify-center">
                 2
               </div>
               <div>
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-folder-tree text-purple-400"></i> Clasificación
-                </h2>
-                <p class="text-xs text-slate-400">Asigna la categoría y subcategoría correspondiente</p>
+                <h2 class="text-sm font-semibold text-white">Clasificación</h2>
+                <p class="text-[11px] text-slate-500">Asigna la categoría y subcategoría correspondiente</p>
               </div>
             </header>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <!-- Selector de Categoría -->
               <div>
-                <label for="id_categoria" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                  Categoría <span class="text-rose-400">*</span>
+                <label for="id_categoria" class="block text-xs font-medium text-slate-300 mb-1.5">
+                  Categoría <span class="text-red-400">*</span>
                 </label>
                 <select
                   id="id_categoria"
                   formControlName="id_categoria"
                   (change)="onCategoryChange()"
-                  class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                  [class.border-rose-500]="isFieldInvalid('id_categoria')"
+                  class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-300 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors cursor-pointer"
+                  [class.border-red-600]="isFieldInvalid('id_categoria')"
                 >
                   <option value="" disabled selected>-- Seleccionar Categoría --</option>
                   @for (cat of categories(); track cat.id) {
@@ -160,19 +151,19 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                   }
                 </select>
                 @if (isFieldInvalid('id_categoria')) {
-                  <p class="mt-1.5 text-xs text-rose-400">Selecciona una categoría.</p>
+                  <p class="mt-1 text-[11px] text-red-400">Selecciona una categoría.</p>
                 }
               </div>
 
               <!-- Selector de Subcategoría -->
               <div>
-                <label for="id_subcategoria" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                <label for="id_subcategoria" class="block text-xs font-medium text-slate-300 mb-1.5">
                   Subcategoría
                 </label>
                 <select
                   id="id_subcategoria"
                   formControlName="id_subcategoria"
-                  class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all disabled:opacity-50"
+                  class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-300 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors disabled:opacity-40 cursor-pointer"
                   [disabled]="availableSubcategories().length === 0"
                 >
                   <option [ngValue]="null">-- Ninguna / Opcional --</option>
@@ -185,28 +176,26 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
           </section>
 
           <!-- 3. Precios e Inventario -->
-          <section class="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 sm:p-7 shadow-sm">
-            <header class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
-              <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 font-bold text-sm flex items-center justify-center border border-emerald-500/20">
+          <section class="bg-[#111622] border border-slate-800/90 rounded-2xl p-5 sm:p-6">
+            <header class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-800/80">
+              <div class="w-6 h-6 rounded-md bg-slate-800 border border-slate-700/60 text-slate-300 font-medium text-xs flex items-center justify-center">
                 3
               </div>
               <div>
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-coins text-emerald-400"></i> Precios e Inventario
-                </h2>
-                <p class="text-xs text-slate-400">Precios de venta, stock disponible y slot físico</p>
+                <h2 class="text-sm font-semibold text-white">Precios e Inventario</h2>
+                <p class="text-[11px] text-slate-500">Precios de venta, stock disponible y slot físico</p>
               </div>
             </header>
 
             <div class="space-y-4">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 <!-- Precio -->
                 <div>
-                  <label for="precio" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                    Precio ($) <span class="text-rose-400">*</span>
+                  <label for="precio" class="block text-xs font-medium text-slate-300 mb-1.5">
+                    Precio ($) <span class="text-red-400">*</span>
                   </label>
-                  <div class="relative rounded-2xl">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 text-sm font-bold">$</span>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs">$</span>
                     <input
                       id="precio"
                       type="number"
@@ -214,22 +203,22 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                       min="0"
                       formControlName="precio"
                       placeholder="0.00"
-                      class="w-full pl-8 pr-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                      [class.border-rose-500]="isFieldInvalid('precio')"
+                      class="w-full pl-7 pr-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
+                      [class.border-red-600]="isFieldInvalid('precio')"
                     />
                   </div>
                   @if (isFieldInvalid('precio')) {
-                    <p class="mt-1.5 text-xs text-rose-400">Ingresa un precio válido.</p>
+                    <p class="mt-1 text-[11px] text-red-400">Ingresa un precio válido.</p>
                   }
                 </div>
 
                 <!-- Descuento -->
                 <div>
-                  <label for="descuento" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                  <label for="descuento" class="block text-xs font-medium text-slate-300 mb-1.5">
                     Descuento ($)
                   </label>
-                  <div class="relative rounded-2xl">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 text-sm font-bold">$</span>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs">$</span>
                     <input
                       id="descuento"
                       type="number"
@@ -237,15 +226,15 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                       min="0"
                       formControlName="descuento"
                       placeholder="0.00"
-                      class="w-full pl-8 pr-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                      class="w-full pl-7 pr-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
                     />
                   </div>
                 </div>
 
                 <!-- Stock Inicial -->
                 <div>
-                  <label for="stock" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                    Stock Inicial <span class="text-rose-400">*</span>
+                  <label for="stock" class="block text-xs font-medium text-slate-300 mb-1.5">
+                    Stock Inicial <span class="text-red-400">*</span>
                   </label>
                   <input
                     id="stock"
@@ -253,43 +242,43 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                     min="0"
                     formControlName="stock"
                     placeholder="10"
-                    class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                    [class.border-rose-500]="isFieldInvalid('stock')"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
+                    [class.border-red-600]="isFieldInvalid('stock')"
                   />
                   @if (isFieldInvalid('stock')) {
-                    <p class="mt-1.5 text-xs text-rose-400">El stock es obligatorio.</p>
+                    <p class="mt-1 text-[11px] text-red-400">El stock es obligatorio.</p>
                   }
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
                 <!-- Ubicación Slot -->
                 <div>
-                  <label for="ubicacion" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                    Ubicación Slot (Letra + Número) <span class="text-rose-400">*</span>
+                  <label for="ubicacion" class="block text-xs font-medium text-slate-300 mb-1.5">
+                    Ubicación Slot (Ej: A1) <span class="text-red-400">*</span>
                   </label>
                   <input
                     id="ubicacion"
                     type="text"
                     formControlName="ubicacion"
-                    placeholder="Ej: A1, B2, C3"
+                    placeholder="A1"
                     maxlength="3"
                     (input)="onUbicacionInput($event)"
-                    class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-mono"
-                    [class.border-rose-500]="isFieldInvalid('ubicacion')"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs uppercase focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors font-mono"
+                    [class.border-red-600]="isFieldInvalid('ubicacion')"
                   />
                   @if (isFieldInvalid('ubicacion')) {
-                    <p class="mt-1.5 text-xs text-rose-400">Formato inválido. Usa una letra y un número (Ej: A1).</p>
+                    <p class="mt-1 text-[11px] text-red-400">Usa una letra y un número (Ej: A1).</p>
                   }
                 </div>
 
                 <!-- Switch Activo -->
-                <div class="flex items-center gap-3 sm:pt-6">
+                <div class="flex items-center gap-2.5 sm:pt-6">
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" formControlName="activo" class="sr-only peer">
-                    <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate-300"></div>
                   </label>
-                  <span class="text-sm font-semibold text-slate-200">Producto Activo en Tienda</span>
+                  <span class="text-xs font-medium text-slate-300">Producto activo en tienda</span>
                 </div>
               </div>
             </div>
@@ -298,44 +287,42 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
         </div>
 
         <!-- Columna Derecha: Imágenes, Destacado y Botón Submit (4 cols) -->
-        <div class="lg:col-span-4 space-y-6">
+        <div class="lg:col-span-4 space-y-5">
           
           <!-- 4. Imágenes del Producto -->
-          <section class="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 shadow-sm">
-            <header class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-800/80">
-              <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 font-bold text-sm flex items-center justify-center border border-amber-500/20">
+          <section class="bg-[#111622] border border-slate-800/90 rounded-2xl p-5">
+            <header class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-800/80">
+              <div class="w-6 h-6 rounded-md bg-slate-800 border border-slate-700/60 text-slate-300 font-medium text-xs flex items-center justify-center">
                 4
               </div>
               <div>
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-image text-amber-400"></i> Imágenes
-                </h2>
-                <p class="text-xs text-slate-400">Principal y secundarias optimizadas</p>
+                <h2 class="text-sm font-semibold text-white">Imágenes</h2>
+                <p class="text-[11px] text-slate-500">Principal y secundarias</p>
               </div>
             </header>
 
             <!-- Imagen Principal -->
-            <div class="space-y-3 mb-5">
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">
-                <i class="fas fa-star text-amber-400 text-xs mr-1"></i> Imagen Principal <span class="text-rose-400">*</span>
+            <div class="space-y-2.5 mb-4">
+              <label class="block text-xs font-medium text-slate-300">
+                Imagen Principal <span class="text-red-400">*</span>
               </label>
 
               @if (imgPrincipalPreview()) {
-                <div class="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 group">
-                  <img [src]="imgPrincipalPreview()" alt="Preview Principal" class="w-full h-44 object-contain p-2" />
-                  <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity">
+                <div class="relative rounded-xl overflow-hidden border border-slate-800 bg-[#0d111a] group">
+                  <img [src]="imgPrincipalPreview()" alt="Preview Principal" class="w-full h-36 object-contain p-2" />
+                  <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
                     <button
                       type="button"
                       (click)="fileInputPrincipal.click()"
-                      class="p-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500 text-xs font-semibold cursor-pointer"
+                      class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 hover:text-white text-xs font-medium cursor-pointer"
                       title="Cambiar imagen"
                     >
-                      <i class="fas fa-camera"></i> Cambiar
+                      <i class="fas fa-camera"></i>
                     </button>
                     <button
                       type="button"
                       (click)="removePrincipalImage()"
-                      class="p-2 rounded-xl bg-rose-600 text-white hover:bg-rose-500 text-xs font-semibold cursor-pointer"
+                      class="px-2.5 py-1.5 rounded-lg bg-red-900/60 text-red-300 hover:text-white text-xs font-medium cursor-pointer"
                       title="Eliminar imagen"
                     >
                       <i class="fas fa-trash"></i>
@@ -345,31 +332,31 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
               } @else {
                 <div
                   (click)="fileInputPrincipal.click()"
-                  class="border-2 border-dashed border-slate-800 hover:border-indigo-500/60 rounded-2xl p-6 text-center cursor-pointer transition-all hover:bg-slate-950/40 group"
+                  class="border border-dashed border-slate-800 hover:border-slate-600 rounded-xl p-5 text-center cursor-pointer transition-colors bg-[#0d111a] group"
                 >
-                  <i class="fas fa-cloud-arrow-up text-3xl text-indigo-400 mb-2 group-hover:scale-110 transition-transform"></i>
-                  <p class="text-xs font-bold text-slate-300">Subir Imagen Principal</p>
-                  <p class="text-[11px] text-slate-500 mt-1">PNG, JPG, WebP (Optimizado a 800px)</p>
+                  <i class="fas fa-cloud-arrow-up text-xl text-slate-400 mb-1.5"></i>
+                  <p class="text-xs font-medium text-slate-300">Subir Imagen Principal</p>
+                  <p class="text-[10px] text-slate-500 mt-0.5">PNG, JPG o WebP</p>
                 </div>
               }
               <input #fileInputPrincipal type="file" accept="image/*" (change)="onFileChange($event, 'principal')" class="hidden" />
             </div>
 
             <!-- Imágenes Secundarias (3 slots) -->
-            <div class="space-y-2">
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">
-                Imágenes Secundarias (Opcionales)
+            <div class="space-y-1.5">
+              <label class="block text-xs font-medium text-slate-400">
+                Secundarias (Opcionales)
               </label>
               
               <div class="grid grid-cols-3 gap-2">
                 <!-- Slot 1 -->
                 @if (imgSec1Preview()) {
-                  <div class="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square group">
+                  <div class="relative rounded-lg overflow-hidden border border-slate-800 bg-[#0d111a] aspect-square group">
                     <img [src]="imgSec1Preview()" alt="Sec 1" class="w-full h-full object-contain p-1" />
                     <button
                       type="button"
                       (click)="removeSecImage(1)"
-                      class="absolute top-1 right-1 w-6 h-6 rounded-md bg-rose-600/80 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      class="absolute top-1 right-1 w-5 h-5 rounded bg-red-900/80 text-white text-[9px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <i class="fas fa-xmark"></i>
                     </button>
@@ -377,22 +364,22 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                 } @else {
                   <div
                     (click)="fileInputSec1.click()"
-                    class="border border-dashed border-slate-800 hover:border-slate-700 rounded-xl aspect-square flex flex-col items-center justify-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors"
+                    class="border border-dashed border-slate-800 hover:border-slate-600 rounded-lg aspect-square flex flex-col items-center justify-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors bg-[#0d111a]"
                   >
                     <i class="fas fa-plus text-xs"></i>
-                    <span class="text-[9px] mt-1 font-semibold">Foto 2</span>
+                    <span class="text-[8px] mt-0.5 font-medium">Foto 2</span>
                   </div>
                 }
                 <input #fileInputSec1 type="file" accept="image/*" (change)="onFileChange($event, 'sec1')" class="hidden" />
 
                 <!-- Slot 2 -->
                 @if (imgSec2Preview()) {
-                  <div class="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square group">
+                  <div class="relative rounded-lg overflow-hidden border border-slate-800 bg-[#0d111a] aspect-square group">
                     <img [src]="imgSec2Preview()" alt="Sec 2" class="w-full h-full object-contain p-1" />
                     <button
                       type="button"
                       (click)="removeSecImage(2)"
-                      class="absolute top-1 right-1 w-6 h-6 rounded-md bg-rose-600/80 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      class="absolute top-1 right-1 w-5 h-5 rounded bg-red-900/80 text-white text-[9px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <i class="fas fa-xmark"></i>
                     </button>
@@ -400,22 +387,22 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                 } @else {
                   <div
                     (click)="fileInputSec2.click()"
-                    class="border border-dashed border-slate-800 hover:border-slate-700 rounded-xl aspect-square flex flex-col items-center justify-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors"
+                    class="border border-dashed border-slate-800 hover:border-slate-600 rounded-lg aspect-square flex flex-col items-center justify-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors bg-[#0d111a]"
                   >
                     <i class="fas fa-plus text-xs"></i>
-                    <span class="text-[9px] mt-1 font-semibold">Foto 3</span>
+                    <span class="text-[8px] mt-0.5 font-medium">Foto 3</span>
                   </div>
                 }
                 <input #fileInputSec2 type="file" accept="image/*" (change)="onFileChange($event, 'sec2')" class="hidden" />
 
                 <!-- Slot 3 -->
                 @if (imgSec3Preview()) {
-                  <div class="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square group">
+                  <div class="relative rounded-lg overflow-hidden border border-slate-800 bg-[#0d111a] aspect-square group">
                     <img [src]="imgSec3Preview()" alt="Sec 3" class="w-full h-full object-contain p-1" />
                     <button
                       type="button"
                       (click)="removeSecImage(3)"
-                      class="absolute top-1 right-1 w-6 h-6 rounded-md bg-rose-600/80 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      class="absolute top-1 right-1 w-5 h-5 rounded bg-red-900/80 text-white text-[9px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <i class="fas fa-xmark"></i>
                     </button>
@@ -423,10 +410,10 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                 } @else {
                   <div
                     (click)="fileInputSec3.click()"
-                    class="border border-dashed border-slate-800 hover:border-slate-700 rounded-xl aspect-square flex flex-col items-center justify-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors"
+                    class="border border-dashed border-slate-800 hover:border-slate-600 rounded-lg aspect-square flex flex-col items-center justify-center cursor-pointer text-slate-500 hover:text-slate-300 transition-colors bg-[#0d111a]"
                   >
                     <i class="fas fa-plus text-xs"></i>
-                    <span class="text-[9px] mt-1 font-semibold">Foto 4</span>
+                    <span class="text-[8px] mt-0.5 font-medium">Foto 4</span>
                   </div>
                 }
                 <input #fileInputSec3 type="file" accept="image/*" (change)="onFileChange($event, 'sec3')" class="hidden" />
@@ -435,32 +422,30 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
           </section>
 
           <!-- 5. Opciones Destacadas -->
-          <section class="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 shadow-sm">
-            <header class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-800/80">
-              <div class="w-8 h-8 rounded-xl bg-cyan-500/10 text-cyan-400 font-bold text-sm flex items-center justify-center border border-cyan-500/20">
+          <section class="bg-[#111622] border border-slate-800/90 rounded-2xl p-5">
+            <header class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-800/80">
+              <div class="w-6 h-6 rounded-md bg-slate-800 border border-slate-700/60 text-slate-300 font-medium text-xs flex items-center justify-center">
                 5
               </div>
               <div>
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-award text-cyan-400"></i> Destacado
-                </h2>
-                <p class="text-xs text-slate-400">Prioridad en quiosco y terminal</p>
+                <h2 class="text-sm font-semibold text-white">Destacado</h2>
+                <p class="text-[11px] text-slate-500">Prioridad en catálogo</p>
               </div>
             </header>
 
-            <div class="space-y-4">
+            <div class="space-y-3.5">
               <div class="flex items-center justify-between">
-                <span class="text-sm font-semibold text-slate-200">Destacar en Catálogo</span>
+                <span class="text-xs font-medium text-slate-300">Destacar en catálogo</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" formControlName="destacado" (change)="onDestacadoChange()" class="sr-only peer">
-                  <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+                  <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate-300"></div>
                 </label>
               </div>
 
               @if (isDestacadoChecked()) {
-                <div class="pt-2 animate-fade-in">
-                  <label for="orden_destacado" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                    Posición de Orden <span class="text-rose-400">*</span>
+                <div class="pt-1 animate-fade-in">
+                  <label for="orden_destacado" class="block text-xs font-medium text-slate-300 mb-1.5">
+                    Posición de Orden <span class="text-red-400">*</span>
                   </label>
                   <input
                     id="orden_destacado"
@@ -468,11 +453,11 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
                     min="1"
                     formControlName="orden_destacado"
                     placeholder="Ej: 1, 2, 3"
-                    class="w-full px-4 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all font-mono"
-                    [class.border-rose-500]="isFieldInvalid('orden_destacado')"
+                    class="w-full px-3 py-2 bg-[#0d111a] border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors font-mono"
+                    [class.border-red-600]="isFieldInvalid('orden_destacado')"
                   />
                   @if (isFieldInvalid('orden_destacado')) {
-                    <p class="mt-1.5 text-xs text-rose-400">Indica el número de orden para productos destacados.</p>
+                    <p class="mt-1 text-[11px] text-red-400">Indica el número de orden.</p>
                   }
                 </div>
               }
@@ -480,26 +465,26 @@ import { CategoryDto, SubcategoryDto } from '../../../api/models';
           </section>
 
           <!-- Botones de Acción -->
-          <div class="space-y-3 pt-2">
+          <div class="space-y-2.5 pt-1">
             <button
               type="submit"
               [disabled]="isLoading() || productForm.invalid || !imgPrincipalPreview()"
-              class="w-full inline-flex items-center justify-center gap-2.5 py-4 px-6 rounded-2xl font-bold text-sm tracking-wider uppercase text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer"
+              class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-medium text-xs text-slate-900 bg-slate-100 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-sm"
             >
               @if (isLoading()) {
                 <i class="fas fa-spinner fa-spin"></i>
-                <span>Guardando Producto...</span>
+                <span>Guardando...</span>
               } @else {
-                <i class="fas fa-save"></i>
-                <span>GUARDAR PRODUCTO</span>
+                <i class="fas fa-check text-xs"></i>
+                <span>Guardar Producto</span>
               }
             </button>
 
             <a
-              routerLink="/admin"
-              class="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl font-semibold text-xs text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all cursor-pointer text-center"
+              routerLink="/admin/productos"
+              class="w-full inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-medium text-xs text-slate-400 hover:text-slate-200 bg-[#0d111a] hover:bg-slate-800 border border-slate-800 transition-colors cursor-pointer text-center"
             >
-              Cancelar y Volver
+              Cancelar
             </a>
           </div>
 
