@@ -56,8 +56,7 @@ export class AuthService {
           nombre: 'Administrador PauloBot',
           correo: correo,
           tipo_usuario: 'Administrador',
-          activo: 1,
-          created_at: new Date().toISOString()
+          activo: 1
         };
         const token = 'paulobot_dev_token_' + Date.now();
         this.setSession(token, adminUser);
